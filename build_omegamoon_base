@@ -1,0 +1,41 @@
+#!/bin/bash
+
+THREADS="6"
+DEVICE="rk3066b_defconfig"
+TOOLCHAIN=./omegamoon/toolchain/arm-linux-androideabi-4.7/prebuilt/linux-x86/bin/arm-linux-androideabi-
+
+# Linaro gcc 4.8
+#TOOLCHAIN=../../../../android/linaro/android-toolchain-eabi/bin/arm-linux-androideabi-
+
+# gcc version 4.6.x-google 20120106 (prerelease)
+#TOOLCHAIN=../../../../android/android-ndk-r8b/toolchains/arm-linux-androideabi-4.6/prebuilt/linux-x86/bin/arm-linux-androideabi-
+
+# crewrktablets
+#TOOLCHAIN=../../../../android/crewrktablets/arm-eabi-4.4.3/bin/arm-eabi-
+
+if [ "$1" != "" ]; then
+  THREADS="$1"
+fi
+
+if [ "$2" != "" ]; then
+  DEVICE="$2"
+fi
+
+#echo -e "\n========================================="
+#echo -e " Forced rebuild of Mali driver..."
+#echo -e "=========================================\n"
+#rm drivers/gpu/mali/ump/.*.cmd
+#rm drivers/gpu/mali/ump/*.o
+#rm drivers/gpu/mali/mali/.*.cmd
+#rm drivers/gpu/mali/mali/*.o
+
+echo -e "\n========================================="
+echo -e " Configuring kernel for ${DEVICE}"
+echo -e "=========================================\n"
+ARCH=arm CROSS_COMPILE=$TOOLCHAIN make $DEVICE
+
+echo -e "\n========================================="
+echo -e " Building kernel for ${DEVICE} with ${THREADS} thread(s)"
+echo -e "=========================================\n"
+
+ARCH=arm CROSS_COMPILE=$TOOLCHAIN make -j$THREADS

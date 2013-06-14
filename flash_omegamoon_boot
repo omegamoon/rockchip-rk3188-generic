@@ -1,0 +1,2 @@
+sudo ./omegamoon/rkflashtool w 0x0000C000 0x00008000 < ./omegamoon/customboot.img
+sudo ./omegamoon/rkflashtool b
